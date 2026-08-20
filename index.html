@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CARTRIDGE — Playable Ads Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12131a;
+    --surface:#1b1d28;
+    --surface-2:#222432;
+    --line:#2c2f42;
+    --lime:#c6ff3d;
+    --coral:#ff5a5f;
+    --text:#f3f3ee;
+    --muted:#8a8ca0;
+    --radius:10px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:28px 32px;
+    max-width:1180px; margin:0 auto;
+  }
+  .brand{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700; font-size:20px; letter-spacing:0.5px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .brand .dot{width:10px; height:10px; background:var(--lime); border-radius:2px; display:inline-block;}
+  nav a{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; color:var(--muted);
+    margin-left:28px; text-transform:uppercase; letter-spacing:1px;
+    transition:color .2s;
+  }
+  nav a:hover{color:var(--lime);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:64px 32px 40px;
+    max-width:1180px; margin:0 auto;
+    border-bottom:1px solid var(--line);
+  }
+  .hero .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; color:var(--lime);
+    letter-spacing:2px; text-transform:uppercase;
+    margin-bottom:18px; display:block;
+  }
+  .hero h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(40px, 7vw, 78px);
+    line-height:0.98;
+    letter-spacing:-1.5px;
+    max-width:900px;
+  }
+  .hero h1 em{
+    font-style:normal; color:var(--lime);
+  }
+  .hero p{
+    margin-top:22px;
+    max-width:520px;
+    color:var(--muted);
+    font-size:16px;
+  }
+  .hero .cta{
+    margin-top:32px;
+    display:inline-flex; gap:14px;
+  }
+  .btn{
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    padding:12px 22px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    transition:all .2s;
+  }
+  .btn.primary{background:var(--lime); color:#12131a; border-color:var(--lime); font-weight:600;}
+  .btn.primary:hover{background:#d9ff6f;}
+  .btn.ghost:hover{border-color:var(--lime); color:var(--lime);}
+
+  /* ---------- Marquee (signature strip) ---------- */
+  .marquee{
+    border-bottom:1px solid var(--line);
+    background:var(--surface);
+    overflow:hidden;
+    white-space:nowrap;
+    padding:14px 0;
+  }
+  .marquee-track{
+    display:inline-block;
+    animation:scroll 26s linear infinite;
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+    color:var(--muted);
+    letter-spacing:1px;
+  }
+  .marquee-track span{margin:0 22px;}
+  .marquee-track span.hl{color:var(--coral);}
+  @keyframes scroll{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .marquee-track{animation:none;}
+  }
+
+  /* ---------- Grid section ---------- */
+  section.grid-section{
+    padding:64px 32px 40px;
+    max-width:1180px; margin:0 auto;
+  }
+  .section-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:32px; flex-wrap:wrap; gap:10px;
+  }
+  .section-head h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:28px; font-weight:700;
+  }
+  .section-head span{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; color:var(--muted);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:20px;
+  }
+
+  .card{
+    position:relative;
+    display:block;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    perspective:800px;
+    cursor:pointer;
+    transition:transform .35s ease, border-color .35s ease;
+  }
+  .card .play{
+    position:absolute; top:12px; right:12px;
+    width:30px; height:30px; border-radius:50%;
+    background:rgba(0,0,0,.4);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; transform:scale(.8);
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .card:hover .play{ opacity:1; transform:scale(1); }
+  .card .play svg{ width:12px; height:12px; }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:var(--card-accent, var(--lime));
+  }
+  .card .stripe{
+    height:110px;
+    position:relative;
+    overflow:hidden;
+    background:var(--card-accent);
+  }
+  .card .stripe img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform .4s ease;
+  }
+  .card:hover .stripe img{ transform:scale(1.06); }
+  .card .stripe .badges{
+    position:absolute; top:0; left:0; right:0;
+    display:flex; align-items:flex-start; justify-content:space-between;
+    padding:12px 14px;
+  }
+  .card .id{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; color:rgba(255,255,255,.75);
+    background:rgba(0,0,0,.35);
+    padding:3px 8px; border-radius:5px;
+  }
+  .card .fmt{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; color:rgba(255,255,255,.75);
+    background:rgba(0,0,0,.35);
+    padding:3px 8px; border-radius:5px;
+  }
+  .card .body{padding:16px 16px 18px;}
+  .card h3{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:18px; font-weight:700; margin-bottom:4px;
+  }
+  .card .client{
+    font-size:12px; color:var(--muted); margin-bottom:10px;
+  }
+  .card .desc{
+    font-size:13px; color:#c7c8d6; margin-bottom:14px;
+  }
+  .tags{display:flex; flex-wrap:wrap; gap:6px;}
+  .tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px; color:var(--muted);
+    border:1px solid var(--line);
+    padding:3px 8px; border-radius:999px;
+  }
+
+  /* ---------- About strip ---------- */
+  .about{
+    padding:56px 32px; max-width:1180px; margin:0 auto;
+    border-top:1px solid var(--line);
+    display:grid; grid-template-columns:1fr 1fr; gap:40px;
+  }
+  @media (max-width:720px){ .about{grid-template-columns:1fr;} }
+  .about h2{
+    font-family:'Space Grotesk', sans-serif; font-size:24px; margin-bottom:14px;
+  }
+  .about p{color:var(--muted); font-size:14.5px; max-width:480px;}
+  .stat-row{display:flex; gap:32px; margin-top:24px; flex-wrap:wrap;}
+  .stat b{
+    font-family:'Space Grotesk', sans-serif; font-size:28px; color:var(--lime); display:block;
+  }
+  .stat span{font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted);}
+
+  /* ---------- Footer ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:28px 32px;
+    max-width:1180px; margin:0 auto;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px;
+  }
+  footer .fine{
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted);
+  }
+  footer .links a{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--muted);
+    margin-left:18px;
+  }
+  footer .links a:hover{color:var(--lime);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><span class="dot"></span>CARTRIDGE.DEV</div>
+  <nav>
+    <a href="#work">Dự án</a>
+    <a href="#about">Giới thiệu</a>
+    <a href="#contact">Liên hệ</a>
+  </nav>
+</header>
+
+<!-- HERO: sửa tên, vai trò, mô tả ở đây -->
+<section class="hero">
+  <span class="eyebrow">Playable ads & hybrid-casual dev</span>
+  <h1>Mình làm những<br>ván game <em>chơi được</em><br>trong 30 giây.</h1>
+  <p>Portfolio playable ads & mini-game — tối ưu dung lượng, mượt trên mọi ad network, và đủ vui để người xem bấm "Cài đặt".</p>
+  <div class="cta">
+    <a class="btn primary" href="#work">Xem dự án</a>
+    <a class="btn ghost" href="#contact">Liên hệ hợp tác</a>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track">
+    <span>MRAID 2.0</span><span class="hl">/</span>
+    <span>MRAID 3.0</span><span class="hl">/</span>
+    <span>Match-3</span><span class="hl">/</span>
+    <span>Physics Puzzle</span><span class="hl">/</span>
+    <span>Hybrid Casual</span><span class="hl">/</span>
+    <span>2.5D & 3D</span><span class="hl">/</span>
+    <span>&lt; 100KB build</span><span class="hl">/</span>
+    <span>MRAID 2.0</span><span class="hl">/</span>
+    <span>MRAID 3.0</span><span class="hl">/</span>
+    <span>Match-3</span><span class="hl">/</span>
+    <span>Physics Puzzle</span><span class="hl">/</span>
+    <span>Hybrid Casual</span><span class="hl">/</span>
+    <span>2.5D & 3D</span><span class="hl">/</span>
+    <span>&lt; 100KB build</span><span class="hl">/</span>
+  </div>
+</div>
+
+<!-- GRID DỰ ÁN: copy 1 khối .card để thêm dự án mới -->
+<section class="grid-section" id="work">
+  <div class="section-head">
+    <h2>Dự án</h2>
+    <span>6 playable ads</span>
+  </div>
+  <div class="grid">
+
+    <a class="card" href="ad/hero-wars/index.html" style="--card-accent:#ff5a5f">
+      <div class="stripe">
+         <img src="assets/hero-wars.png" alt="Ảnh minh hoạ Hero Wars">
+        <div class="badges">
+          <span class="play"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#fff"/></svg></span>
+          <span class="id">Playable-01</span>
+          <span class="fmt">2D</span>
+        </div>
+      </div>
+      <div class="body">
+        <h3>Hero Wars</h3>
+        <div class="client">Solve puzzles to get the treasure</div>
+        <div class="desc">Puzzle</div>
+        <div class="tags">
+          <span class="tag">4MB</span>
+          <span class="tag">MRAID 2.0</span>
+          <span class="tag">iOS/Android</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="ad/blockjam/index.html" style="--card-accent:#c6ff3d">
+      <div class="stripe">
+        <div class="badges">
+          <span class="play"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#fff"/></svg></span>
+          <span class="id">CART-02</span>
+          <span class="fmt">2D</span>
+        </div>
+      </div>
+      <div class="body">
+        <h3>Block Jam</h3>
+        <div class="client">Client: Rollic</div>
+        <div class="desc">Puzzle xếp khối màu sắc, tương tác kéo-thả.</div>
+        <div class="tags">
+          <span class="tag">66 KB</span>
+          <span class="tag">MRAID 2.0</span>
+          <span class="tag">iOS/Android</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="ad/royalmatch/index.html" style="--card-accent:#7d6bff">
+      <div class="stripe">
+        <div class="badges">
+          <span class="play"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#fff"/></svg></span>
+          <span class="id">CART-03</span>
+          <span class="fmt">2.5D</span>
+        </div>
+      </div>
+      <div class="body">
+        <h3>Royal Match</h3>
+        <div class="client">Client: Dream Games</div>
+        <div class="desc">Match-3 chủ đề hoàng gia, hiệu ứng đặc biệt.</div>
+        <div class="tags">
+          <span class="tag">96 KB</span>
+          <span class="tag">MRAID 2.0</span>
+          <span class="tag">iOS/Android</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="ad/arrowclash/index.html" style="--card-accent:#4fd6c4">
+      <div class="stripe">
+        <div class="badges">
+          <span class="play"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#fff"/></svg></span>
+          <span class="id">CART-04</span>
+          <span class="fmt">2D</span>
+        </div>
+      </div>
+      <div class="body">
+        <h3>Arrow Clash</h3>
+        <div class="client">Client: Lessmore GmbH</div>
+        <div class="desc">Puzzle bắn mũi tên, giải phóng đường đi.</div>
+        <div class="tags">
+          <span class="tag">72 KB</span>
+          <span class="tag">MRAID 3.0</span>
+          <span class="tag">iOS/Android</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="ad/knockdown/index.html" style="--card-accent:#ffb84f">
+      <div class="stripe">
+        <div class="badges">
+          <span class="play"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#fff"/></svg></span>
+          <span class="id">CART-05</span>
+          <span class="fmt">3D</span>
+        </div>
+      </div>
+      <div class="body">
+        <h3>Knock Down</h3>
+        <div class="client">Client: Studio Nine</div>
+        <div class="desc">Phá dỡ công trình bằng vật lý thực tế.</div>
+        <div class="tags">
+          <span class="tag">754 KB</span>
+          <span class="tag">MRAID 3.0</span>
+          <span class="tag">iOS/Android</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="ad/crazygoal/index.html" style="--card-accent:#ff5a9e">
+      <div class="stripe">
+        <div class="badges">
+          <span class="play"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#fff"/></svg></span>
+          <span class="id">CART-06</span>
+          <span class="fmt">3D</span>
+        </div>
+      </div>
+      <div class="body">
+        <h3>Crazy Goal</h3>
+        <div class="client">Client: Animals Arena</div>
+        <div class="desc">Bóng đá phong cách hài hước, vật lý điên rồ.</div>
+        <div class="tags">
+          <span class="tag">563 KB</span>
+          <span class="tag">MRAID 2.0</span>
+          <span class="tag">iOS/Android</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- GIỚI THIỆU: sửa đoạn mô tả và số liệu -->
+<section class="about" id="about">
+  <div>
+    <h2>Về mình</h2>
+    <p>Mình chuyên xây dựng playable ads và mini-game hybrid-casual, tối ưu tốc độ tải và tương thích với mọi ad network (AdMob, Unity Ads, Meta, Mintegral, ironSource...).</p>
+  </div>
+  <div>
+    <p>Mỗi build đều được nén kỹ để chạy mượt kể cả trên mạng yếu, giữ đúng cảm giác chơi của game gốc trong 20–30 giây trải nghiệm.</p>
+    <div class="stat-row">
+      <div class="stat"><b>30+</b><span>PLAYABLE ĐÃ SHIP</span></div>
+      <div class="stat"><b>&lt;100KB</b><span>DUNG LƯỢNG TRUNG BÌNH</span></div>
+      <div class="stat"><b>3</b><span>NĂM KINH NGHIỆM</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LIÊN HỆ: sửa email và link -->
+<footer id="contact">
+  <div class="fine">© 2026 CARTRIDGE.DEV — Sẵn sàng nhận dự án mới.</div>
+  <div class="links">
+    <a href="mailto:hello@example.com">hello@example.com</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">GitHub</a>
+  </div>
+</footer>
+
+</body>
+</html>
